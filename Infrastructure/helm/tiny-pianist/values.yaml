@@ -1,0 +1,17 @@
+deployments:
+- name: api
+  image: dlike/tp-api
+  replicas: 1
+  port: 80
+  path: /api/(.*)
+- name: ui
+  image: dlike/tp-ui
+  replicas: 1
+  port: 80
+  path: /(.*)
+  env:
+  - name: FRONTEND__APIURL
+    value: "/api"
+
+ingress:
+  host: tp.local

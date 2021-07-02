@@ -1,0 +1,43 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tp-ui
+  labels:
+    app: tp-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tp-ui
+  template:
+    metadata:
+      labels:
+        app: tp-ui
+    spec:
+      containers:
+      - name: tp-ui
+        image: dlike/tp-ui:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: FRONTEND__APIURL
+          value: "/api"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tp-ui
+  labels:
+    app: tp-ui
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: tp-ui
+
+
+

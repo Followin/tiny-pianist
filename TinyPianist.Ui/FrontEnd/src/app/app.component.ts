@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   currentDate: string | null = null;
 
   ngOnInit(): void {
-    this.http.get<{date: string}>(`${this.configuration.apiUrl}/api/date`)
+    this.http.get<{date: string}>(`${this.configuration.apiUrl}/date`)
       .subscribe(response => this.currentDate = response.date)
   }
 }

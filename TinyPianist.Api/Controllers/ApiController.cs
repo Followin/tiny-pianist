@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace TinyPianist.Api.Controllers
 {
     [ApiController]
-    [Route("api")]
     public class ApiController : ControllerBase
     {
         [Route("date")]

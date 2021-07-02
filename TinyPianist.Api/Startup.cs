@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace TinyPianist.Api
 {
@@ -30,6 +31,14 @@ namespace TinyPianist.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.Use(async (context, next) =>
+            {
+                var logger = context.RequestServices.GetService<ILogger<Startup>>();
+                logger.LogInformation("Got request {Path}", context.Request.Path);
+
+                await next();
+            });
 
             app.UseRouting();
 

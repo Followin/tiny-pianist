@@ -1,0 +1,50 @@
+{{- range .Values.deployments }}
+{{- $componentName := printf "%s-%s" (include "tiny-pianist.fullname" $) (.name) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $componentName }}
+  labels:
+    {{- include "tiny-pianist.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .name }}
+      {{- include "tiny-pianist.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: {{ .name }}
+        {{- include "tiny-pianist.selectorLabels" $ | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .name }}
+        image: {{ .image }}:latest
+        ports:
+        - containerPort: {{ .port }}
+        {{- if .env }}
+        env:
+          {{- .env | toYaml | nindent 8 }}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $componentName }}
+  labels:
+    {{- include "tiny-pianist.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: {{ .port }}
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "tiny-pianist.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ .name }}
+---
+{{- end }}

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: tiny-pianist
+description: What have you heard
+
+type: application
+version: 0.1.0
+appVersion: 0.1.0
